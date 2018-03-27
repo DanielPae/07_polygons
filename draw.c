@@ -30,6 +30,7 @@ void add_polygon( struct matrix *polygons,
   add_point(polygons, x0, y0, z0);
   add_point(polygons, x1, y1, z1);
   add_point(polygons, x2, y2, z2);
+  //printf("added polygon started at x0[%lf] y0[%lf] z0[%lf]\n", x0, y0, z0);
 }
 
 /*======== void draw_polygons() ==========
@@ -150,32 +151,34 @@ void add_sphere( struct matrix * polygons,
 
   step++;
   for ( lat = latStart; lat < latStop; lat++ ) {
-    for ( longt = longStart + 1; longt < longStop; longt++ ) {
-
+    printf("\ncycle completed lat is now[%d]\n\n", lat);
+    for ( longt = longStart + 1; longt <= longStop; longt++ ) {
       index = lat * (step) + longt;
-      add_polygon( polygonss, points->m[0][index],
+      printf("index[%d]\n", index);
+      //printf("does it crash? [%lf]\n", points->m[0][step + 12]);
+      add_polygon( polygons, points->m[0][index],
 		   points->m[1][index],
 		   points->m[2][index],
-		   points->m[0][index] + 1,
-		   points->m[1][index] + 1,
-		   points->m[2][index] + 1,
-		   points->m[0][index] + step + 1,
-		   points->m[1][index] + step + 1,
-		   points->m[2][index] + step + 1);
-      add_polygon( polygonss, points->m[0][index],
-		   points->m[1][index],
-		   points->m[2][index],
-		   points->m[0][index] + 1,
-		   points->m[1][index] + 1,
-		   points->m[2][index] + 1,
-		   points->m[0][index] + step + 1,
-		   points->m[1][index] + step + 1,
-		   points->m[2][index] + step + 1);
+		   points->m[0][index + 1],
+		   points->m[1][index + 1],
+		   points->m[2][index + 1],
+		   points->m[0][index + step],
+		   points->m[1][index + step],
+		   points->m[2][index + step]);
+      add_polygon( polygons, points->m[0][index + step],
+		   points->m[1][index + step + 1],
+		   points->m[2][index + step + 1],
+		   points->m[0][index + step],
+		   points->m[1][index + step],
+		   points->m[2][index + step],
+		   points->m[0][index + 1],
+		   points->m[1][index + 1],
+		   points->m[2][index + 1]);
     }
+    free_matrix(points);
   }
-  free_matrix(points);
 }
-
+  
 /*======== void generate_sphere() ==========
   Inputs:   double cx
 	    double cy
