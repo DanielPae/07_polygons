@@ -151,32 +151,48 @@ void add_sphere( struct matrix * polygons,
 
   step++;
   for ( lat = latStart; lat < latStop; lat++ ) {
-    printf("\ncycle completed lat is now[%d]\n\n", lat);
-    for ( longt = longStart + 1; longt <= longStop; longt++ ) {
+    index = lat * step;
+    add_polygon(polygons, points->m[0][index],
+		   points->m[1][index],
+		   points->m[2][index],
+		   points->m[0][index + step + 1],
+		   points->m[1][index + step + 1],
+		   points->m[2][index + step + 1],
+		   points->m[0][index + 1],
+		   points->m[1][index + 1],
+		   points->m[2][index + 1]);
+    for ( longt = longStart + 1; longt < longStop; longt++ ) {
       index = lat * (step) + longt;
-      printf("index[%d]\n", index);
-      //printf("does it crash? [%lf]\n", points->m[0][step + 12]);
       add_polygon( polygons, points->m[0][index],
 		   points->m[1][index],
 		   points->m[2][index],
-		   points->m[0][index + 1],
-		   points->m[1][index + 1],
-		   points->m[2][index + 1],
-		   points->m[0][index + step],
-		   points->m[1][index + step],
-		   points->m[2][index + step]);
-      add_polygon( polygons, points->m[0][index + step],
-		   points->m[1][index + step + 1],
-		   points->m[2][index + step + 1],
 		   points->m[0][index + step],
 		   points->m[1][index + step],
 		   points->m[2][index + step],
 		   points->m[0][index + 1],
 		   points->m[1][index + 1],
 		   points->m[2][index + 1]);
+      add_polygon( polygons, points->m[0][index + step],
+		   points->m[1][index + step],
+		   points->m[2][index + step],
+		   points->m[0][index + step + 1],
+		   points->m[1][index + step + 1],
+		   points->m[2][index + step + 1],
+		   points->m[0][index + 1],
+		   points->m[1][index + 1],
+		   points->m[2][index + 1]); 
     }
-    free_matrix(points);
+    add_polygon(polygons, points->m[0][index + step - 1],
+		points->m[1][index + step - 1],
+		points->m[2][index + step - 1],
+		points->m[0][index + step - 2],
+		points->m[1][index + step - 2],
+		points->m[2][index + step - 2],
+		points->m[0][index + (2 * step) - 1],
+		points->m[1][index + (2 * step) - 1],
+		points->m[2][index +(2 * step) - 1]);
   }
+  free_matrix(points);
 }
   
 /*======== void generate_sphere() ==========
